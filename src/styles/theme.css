@@ -1,0 +1,76 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 17px;
+  --font-serif: 'Instrument Serif', serif;
+  --font-sans: 'Inter', sans-serif;
+  --background: #F5F1EB;
+  --foreground: #2B1F18;
+  --card: #F5F1EB;
+  --card-foreground: #2B1F18;
+  --popover: #F5F1EB;
+  --popover-foreground: #2B1F18;
+  --primary: #2B1F18;
+  --primary-foreground: #F5F1EB;
+  --secondary: #EFEAE1;
+  --secondary-foreground: #2B1F18;
+  --muted: #EFEAE1;
+  --muted-foreground: #5C4F47;
+  --accent: #C97B5E;
+  --accent-foreground: #F5F1EB;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(43, 31, 24, 0.1);
+  --input: transparent;
+  --input-background: #EFEAE1;
+  --switch-background: #cbced4;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: oklch(0.708 0 0);
+  --radius: 0.25rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-size: var(--font-size);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    line-height: 1.75;
+  }
+}
