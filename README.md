@@ -6,7 +6,7 @@ A production-ready, multi-page React website for a specialty coffee brand — bu
 
 ## Live Demo
 
-[kuracoffee.vercel.app](https://kuracoffee.vercel.app) *(deploy link — see below)*
+[kura-coffee.vercel.app](https://kura-coffee.vercel.app) *(deploy link — see below)*
 
 ---
 
