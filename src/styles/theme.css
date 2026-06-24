@@ -1,33 +1,42 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --font-size: 17px;
-  --font-serif: 'Instrument Serif', serif;
-  --font-sans: 'Inter', sans-serif;
-  --background: #F5F1EB;
-  --foreground: #2B1F18;
-  --card: #F5F1EB;
-  --card-foreground: #2B1F18;
-  --popover: #F5F1EB;
-  --popover-foreground: #2B1F18;
-  --primary: #2B1F18;
-  --primary-foreground: #F5F1EB;
-  --secondary: #EFEAE1;
-  --secondary-foreground: #2B1F18;
-  --muted: #EFEAE1;
-  --muted-foreground: #5C4F47;
-  --accent: #C97B5E;
-  --accent-foreground: #F5F1EB;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+
+  /* Core palette */
+  --background: #FAF8F5;
+  --foreground: #1C1410;
+  --card: #F4F1EC;
+  --card-foreground: #1C1410;
+  --popover: #FAF8F5;
+  --popover-foreground: #1C1410;
+
+  /* Brand */
+  --primary: #1C1410;
+  --primary-foreground: #FAF8F5;
+  --accent: #B5623E;
+  --accent-foreground: #FAF8F5;
+  --accent-light: #F0E6DF;
+
+  /* Sections - distinct alternating backgrounds */
+  --section-a: #FAF8F5;       /* warm white */
+  --section-b: #F0EBE3;       /* warm beige */
+  --section-c: #E8DDD3;       /* deeper warm tan */
+  --section-dark: #1C1410;    /* espresso dark */
+
+  /* UI */
+  --secondary: #F0EBE3;
+  --secondary-foreground: #1C1410;
+  --muted: #EDE8E1;
+  --muted-foreground: #6B5D54;
+  --border: rgba(28, 20, 16, 0.12);
+  --input: transparent;
+  --input-background: #EDE8E1;
+  --ring: rgba(181, 98, 62, 0.4);
+  --radius: 0.125rem;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
-  --border: rgba(43, 31, 24, 0.1);
-  --input: transparent;
-  --input-background: #EFEAE1;
-  --switch-background: #cbced4;
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --ring: oklch(0.708 0 0);
-  --radius: 0.25rem;
 }
 
 @theme inline {
@@ -49,28 +58,80 @@
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
-  --color-input-background: var(--input-background);
-  --color-switch-background: var(--switch-background);
   --color-ring: var(--ring);
   --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 8px);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
   }
 
   html {
-    font-size: var(--font-size);
+    font-size: 16px;
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
+    font-weight: 300;
     line-height: 1.75;
   }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  /* Section separator utility */
+  .section-a { background-color: var(--section-a); }
+  .section-b { background-color: var(--section-b); }
+  .section-c { background-color: var(--section-c); }
+  .section-dark { background-color: var(--section-dark); color: var(--section-a); }
+
+  /* Top border accent for section transitions */
+  .section-border-top {
+    border-top: 1px solid rgba(28, 20, 16, 0.1);
+  }
+
+  /* Kura label style */
+  .label {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  .label-accent {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+}
+
+/* Responsive grid helper */
+@media (max-width: 768px) {
+  .grid-1-on-mobile {
+    grid-template-columns: 1fr !important;
+    direction: ltr !important;
+  }
+}
+
+/* Smooth image transitions */
+img {
+  transition: opacity 0.3s ease;
 }

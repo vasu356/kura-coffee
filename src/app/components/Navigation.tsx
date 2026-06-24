@@ -3,22 +3,20 @@ import { Link, useLocation } from 'react-router';
 import { ShoppingCart, User, Menu, X } from 'lucide-react';
 
 export function Navigation() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === '/';
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location.pathname]);
+  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
-  const navLinks = [
+  const links = [
     { label: 'Shop', to: '/shop' },
     { label: 'Subscriptions', to: '/subscriptions' },
     { label: 'About', to: '/about' },
@@ -26,87 +24,127 @@ export function Navigation() {
     { label: 'Cafes', to: '/cafes' },
   ];
 
-  const isTransparent = isHome && !scrolled && !isMobileMenuOpen;
+  const transparent = isHome && !scrolled && !mobileOpen;
 
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-10 py-5 transition-all duration-300 ${
-          isTransparent
-            ? 'bg-transparent border-transparent'
-            : 'bg-background/96 backdrop-blur-md border-b border-border/50'
-        }`}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          transition: 'background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease',
+          background: transparent ? 'transparent' : 'rgba(250,248,245,0.97)',
+          backdropFilter: transparent ? 'none' : 'blur(12px)',
+          borderBottom: transparent ? '1px solid transparent' : '1px solid rgba(28,20,16,0.1)',
+        }}
       >
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px', height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Logo */}
           <Link
             to="/"
-            className={`text-3xl tracking-tight font-medium transition-colors ${isTransparent ? 'text-white' : ''}`}
-            style={{ fontFamily: 'var(--font-serif)' }}
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 26,
+              fontWeight: 500,
+              letterSpacing: '-0.02em',
+              color: transparent ? '#FAF8F5' : 'var(--foreground)',
+              textDecoration: 'none',
+              transition: 'color 0.3s',
+            }}
           >
             Kura
           </Link>
 
-          <div className="hidden md:flex items-center gap-10 text-sm tracking-wide">
-            {navLinks.map((link) => (
+          {/* Desktop nav */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 36 }} className="hidden md:flex">
+            {links.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`transition-colors hover:text-accent ${
-                  isTransparent ? 'text-white/85 hover:text-white' : ''
-                } ${location.pathname === link.to ? 'text-accent' : ''}`}
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: 13,
+                  fontWeight: 400,
+                  letterSpacing: '0.04em',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s',
+                  color: transparent
+                    ? (location.pathname === link.to ? '#ffffff' : 'rgba(250,248,245,0.75)')
+                    : (location.pathname === link.to ? 'var(--accent)' : 'var(--foreground)'),
+                  borderBottom: location.pathname === link.to && !transparent ? '1px solid var(--accent)' : '1px solid transparent',
+                  paddingBottom: 2,
+                }}
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          <div className="flex items-center gap-5">
+          {/* Icons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
             <Link
               to="/shop"
-              className={`relative transition-colors hover:text-accent ${isTransparent ? 'text-white' : ''}`}
               aria-label="Cart"
+              style={{ position: 'relative', color: transparent ? '#FAF8F5' : 'var(--foreground)', transition: 'color 0.2s' }}
             >
-              <ShoppingCart size={21} strokeWidth={1.5} />
-              <span className="absolute -top-2 -right-2 w-4 h-4 bg-accent text-white text-[10px] rounded-full flex items-center justify-center font-medium">
-                2
-              </span>
+              <ShoppingCart size={20} strokeWidth={1.5} />
+              <span style={{
+                position: 'absolute', top: -8, right: -8,
+                width: 16, height: 16,
+                background: 'var(--accent)', color: '#fff',
+                fontSize: 9, fontWeight: 600,
+                borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>2</span>
             </Link>
             <button
-              className={`transition-colors hover:text-accent ${isTransparent ? 'text-white' : ''}`}
               aria-label="Account"
+              style={{ color: transparent ? '#FAF8F5' : 'var(--foreground)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, transition: 'color 0.2s' }}
             >
-              <User size={21} strokeWidth={1.5} />
+              <User size={20} strokeWidth={1.5} />
             </button>
             <button
-              className={`md:hidden transition-colors hover:text-accent ${isTransparent ? 'text-white' : ''}`}
-              onClick={() => setIsMobileMenuOpen((v) => !v)}
               aria-label="Menu"
+              onClick={() => setMobileOpen(v => !v)}
+              className="md:hidden"
+              style={{ color: transparent ? '#FAF8F5' : 'var(--foreground)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, transition: 'color 0.2s' }}
             >
-              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 z-40 bg-background/98 backdrop-blur-md md:hidden pt-24 px-8 transition-all duration-300 ${
-          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className="md:hidden"
+        style={{
+          position: 'fixed', inset: 0, zIndex: 90,
+          background: 'var(--background)',
+          display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 40,
+          opacity: mobileOpen ? 1 : 0,
+          pointerEvents: mobileOpen ? 'auto' : 'none',
+          transition: 'opacity 0.3s ease',
+        }}
       >
-        <div className="flex flex-col gap-8" style={{ fontFamily: 'var(--font-serif)' }}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`text-2xl hover:text-accent transition-colors ${
-                location.pathname === link.to ? 'text-accent' : ''
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
+        {links.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 32,
+              fontWeight: 400,
+              color: location.pathname === link.to ? 'var(--accent)' : 'var(--foreground)',
+              textDecoration: 'none',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            {link.label}
+          </Link>
+        ))}
       </div>
     </>
   );

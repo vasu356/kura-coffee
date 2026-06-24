@@ -3,68 +3,51 @@ import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from './ImageWithFallback';
 
-interface ProductCardProps {
-  id: string;
-  name: string;
-  origin: string;
-  varietal: string;
-  process: string;
-  tastingNotes: string;
-  price: number;
-  weight: string;
-  image: string;
-  imageHover: string;
+interface Props {
+  id: string; name: string; origin: string; varietal: string; process: string;
+  tastingNotes: string; price: number; weight: string; image: string; imageHover: string;
   badge?: string | null;
 }
 
-export function ProductCard({ id, name, origin, varietal, process, tastingNotes, price, weight, image, imageHover, badge }: ProductCardProps) {
-  const [isHovered, setIsHovered] = useState(false);
+export function ProductCard({ id, name, origin, varietal, process, tastingNotes, price, weight, image, imageHover, badge }: Props) {
+  const [hovered, setIsHovered] = useState(false);
   const [added, setAdded] = useState(false);
 
-  const handleAdd = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1500);
-  };
-
   return (
-    <div
-      className="group cursor-pointer"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <Link to={`/shop/${id}`} className="block">
-        <div className="aspect-[3/4] bg-secondary mb-6 overflow-hidden rounded-sm relative">
+    <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+      <Link to={`/shop/${id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+        <div style={{ aspectRatio: '3/4', overflow: 'hidden', borderRadius: 2, background: 'var(--muted)', marginBottom: 20, position: 'relative' }}>
           <ImageWithFallback
-            src={isHovered ? imageHover : image}
+            src={hovered ? imageHover : image}
             alt={name}
-            className="w-full h-full object-cover transition-all duration-700"
+            className="w-full h-full object-cover"
+            style={{ transition: 'all 0.65s ease' }}
           />
           {badge && (
-            <span className="absolute top-3 left-3 text-[10px] uppercase tracking-[0.15em] bg-accent text-white px-2.5 py-1 font-medium">
-              {badge}
-            </span>
+            <span style={{
+              position: 'absolute', top: 12, left: 12,
+              fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase',
+              background: 'var(--accent)', color: '#fff', padding: '5px 10px', fontWeight: 600,
+            }}>{badge}</span>
           )}
         </div>
-
-        <div className="space-y-2 mb-4">
-          <h3 className="text-2xl md:text-3xl font-light" style={{ fontFamily: 'var(--font-serif)' }}>
-            {origin}
-          </h3>
-          <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
-            {varietal} · {process}
-          </p>
-          <p className="italic text-[15px] text-foreground/65 leading-[1.7]">{tastingNotes}</p>
-        </div>
+        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 400, lineHeight: 1.2, marginBottom: 6 }}>{origin}</h3>
+        <p style={{ fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted-foreground)', marginBottom: 8, fontWeight: 500 }}>
+          {varietal} · {process}
+        </p>
+        <p style={{ fontStyle: 'italic', fontSize: 14, color: 'var(--muted-foreground)', lineHeight: 1.7, marginBottom: 16 }}>{tastingNotes}</p>
       </Link>
-
-      <div className="flex items-center justify-between pt-1">
-        <span className="text-[16px] font-medium">₹{price} / {weight}</span>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 15, fontWeight: 500 }}>₹{price} <span style={{ fontWeight: 300, color: 'var(--muted-foreground)' }}>/ {weight}</span></span>
         <button
-          onClick={handleAdd}
-          className={`inline-flex items-center gap-1.5 text-[13px] transition-colors ${added ? 'text-accent' : 'hover:text-accent'}`}
-        >
-          {added ? 'Added ✓' : <>Add to cart <ArrowRight size={13} /></>}
+          onClick={(e) => { e.preventDefault(); setAdded(true); setTimeout(() => setAdded(false), 1600); }}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontSize: 12, letterSpacing: '0.05em', color: added ? 'var(--accent)' : 'var(--foreground)',
+            background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-sans)',
+            transition: 'color 0.2s', padding: 0,
+          }}>
+          {added ? 'Added ✓' : <><span>Add to cart</span><ArrowRight size={12} /></>}
         </button>
       </div>
     </div>

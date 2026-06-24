@@ -3,22 +3,17 @@ import { ArrowRight } from 'lucide-react';
 
 export function NotFound() {
   return (
-    <div className="pt-24 min-h-screen flex items-center justify-center px-6">
-      <div className="text-center max-w-md">
-        <p className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-6 font-medium">
-          404
-        </p>
-        <h1 className="text-5xl font-light mb-5" style={{ fontFamily: 'var(--font-serif)' }}>
-          This page doesn't exist.
+    <div style={{ background: 'var(--section-a)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px', paddingTop: 68 }}>
+      <div style={{ textAlign: 'center', maxWidth: 440 }}>
+        <p style={{ fontFamily: 'var(--font-serif)', fontSize: 120, lineHeight: 1, color: 'var(--section-c)', fontWeight: 400, marginBottom: 0 }}>404</p>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 32, fontWeight: 400, lineHeight: 1.2, marginBottom: 16, marginTop: -8 }}>
+          This page does not exist.
         </h1>
-        <p className="text-[17px] text-foreground/65 leading-[1.8] mb-10">
+        <p style={{ fontSize: 16, color: 'var(--muted-foreground)', lineHeight: 1.75, marginBottom: 36 }}>
           But the coffee does. Head back and find something worth brewing.
         </p>
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 bg-accent text-white px-8 py-3.5 hover:bg-accent/90 transition-all font-medium tracking-wide text-[15px]"
-        >
-          Back to home <ArrowRight size={18} />
+        <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--accent)', color: '#fff', padding: '13px 28px', fontSize: 13, fontWeight: 500, letterSpacing: '0.05em', textDecoration: 'none' }}>
+          Back to home <ArrowRight size={16} />
         </Link>
       </div>
     </div>

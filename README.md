@@ -1,41 +1,27 @@
 # Kura Coffee
 
-> Single-origin Indian specialty coffee, roasted in Chennai.
+> Single-origin Indian specialty coffee brand website — roasted to taste like where it came from.
 
-A production-ready, multi-page React website for a specialty coffee brand — built to demonstrate professional frontend engineering skills.
+A production-ready, multi-page React SPA for a specialty coffee brand. Built with modern frontend tooling and a custom design system.
 
 ## Live Demo
 
-[kura-coffee.vercel.app](https://kura-coffee.vercel.app) *(deploy link — see below)*
-
----
-
-## What this project demonstrates
-
-- **React 18 + TypeScript** — fully typed components and data layer
-- **React Router v7** — multi-page SPA with nested routes, dynamic params, and 404 handling
-- **Tailwind CSS v4** — utility-first styling with a custom design token system
-- **Component architecture** — reusable, composable UI components with clear separation of concerns
-- **Design system** — custom CSS variables for color, typography, and spacing; consistent across all pages
-- **Responsive design** — mobile-first layouts that work across all breakpoints
-- **Interaction design** — hover states, image swaps, add-to-cart feedback, FAQ accordion, filter system
-- **Performance** — lazy image loading with fallbacks, minimal dependencies
-- **Production deployment** — Vercel SPA routing config, build optimization
+[View Live](https://kura-coffee.vercel.app/)
 
 ---
 
 ## Pages
 
 | Route | Page |
-|---|---|
-| `/` | Home — hero, product grid, story, process, subscriptions, journal, newsletter |
-| `/shop` | Shop — filterable product grid by roast level and process |
-| `/shop/:id` | Product Detail — images, specs, add to cart, related products |
-| `/about` | About — brand story, farms, team |
-| `/journal` | Journal — article listing with featured post |
+|-------|------|
+| `/` | Home — hero, product grid, brand story, process, subscriptions, journal, newsletter |
+| `/shop` | Shop — filterable product grid by roast level and processing method |
+| `/shop/:id` | Product Detail — image gallery, specs, add to cart, related products |
+| `/about` | About — brand story, farm profiles, team |
+| `/journal` | Journal — featured article + post grid |
 | `/journal/:id` | Article — full blog post with related articles |
-| `/subscriptions` | Subscriptions — plan selection, FAQ accordion |
-| `/cafes` | Cafes — wholesale partners map and contact |
+| `/subscriptions` | Subscriptions — plan selection with FAQ accordion |
+| `/cafes` | Cafes — wholesale partner profiles |
 | `*` | 404 — custom not found page |
 
 ---
@@ -43,27 +29,35 @@ A production-ready, multi-page React website for a specialty coffee brand — bu
 ## Tech Stack
 
 | Tool | Version | Purpose |
-|---|---|---|
+|------|---------|---------|
 | React | 18.3 | UI framework |
 | TypeScript | 5.6 | Type safety |
-| Vite | 6.3 | Build tool |
+| Vite | 6.3 | Build tool & dev server |
 | React Router | 7.13 | Client-side routing |
-| Tailwind CSS | 4.1 | Styling |
-| Lucide React | 0.487 | Icons |
+| Tailwind CSS | 4.1 | Utility-first CSS framework |
+| Lucide React | 0.487 | Icon library |
+
+---
+
+## Features
+
+- **Design System** — custom CSS variables for colors, typography, and spacing, consistent across all pages
+- **Component Architecture** — reusable, composable UI components with clear separation of concerns
+- **Responsive Design** — mobile-first layouts with a responsive grid system
+- **Interaction Design** — hover states, image swaps, add-to-cart feedback, FAQ accordion, filter chips, scroll-aware navigation
+- **Performance** — lazy image loading with fallback component, minimal dependencies
+- **Type Safety** — fully typed components and data layer with TypeScript
+- **SPA Routing** — 9 client-side routes with dynamic params, catch-all 404 handling, scroll restoration
 
 ---
 
 ## Getting Started
 
 ```bash
-# Clone
-git clone https://github.com/yourusername/kura-coffee.git
-cd kura-coffee
-
 # Install dependencies
 npm install
 
-# Run dev server
+# Start development server
 npm run dev
 
 # Build for production
@@ -71,83 +65,76 @@ npm run build
 
 # Preview production build
 npm run preview
+
+# Type check
+npm run typecheck
 ```
-
----
-
-## Deploying to Vercel
-
-### Option 1 — Vercel CLI
-```bash
-npm i -g vercel
-vercel
-# Follow prompts: Framework = Vite, build = dist
-```
-
-### Option 2 — Vercel Dashboard
-1. Push this repo to GitHub
-2. Go to [vercel.com](https://vercel.com) → New Project
-3. Import your GitHub repo
-4. Framework: **Vite** (auto-detected)
-5. Click **Deploy**
-
-The `vercel.json` file is already configured for SPA routing — all routes correctly redirect to `index.html`.
 
 ---
 
 ## Project Structure
 
 ```
-kura-coffee/
-├── src/
-│   ├── app/
-│   │   ├── components/
-│   │   │   ├── layout/       # Navigation, Footer, Layout wrapper
-│   │   │   ├── ui/           # shadcn/ui primitives
-│   │   │   ├── Divider.tsx
-│   │   │   ├── ImageWithFallback.tsx
-│   │   │   ├── Navigation.tsx
-│   │   │   └── ProductCard.tsx
-│   │   ├── data/
-│   │   │   └── index.ts      # All content: products, posts, cafes
-│   │   └── pages/
-│   │       ├── Home.tsx
-│   │       ├── Shop.tsx
-│   │       ├── ProductDetail.tsx
-│   │       ├── About.tsx
-│   │       ├── Journal.tsx
-│   │       ├── JournalPost.tsx
-│   │       ├── Subscriptions.tsx
-│   │       ├── Cafes.tsx
-│   │       └── NotFound.tsx
-│   ├── styles/
-│   │   ├── theme.css         # CSS variables: colors, fonts, radius
-│   │   ├── tailwind.css      # Tailwind + Google Fonts import
-│   │   └── index.css         # Root style imports
-│   └── main.tsx              # BrowserRouter + route definitions
-├── public/
-│   └── favicon.svg
-├── vercel.json               # SPA rewrite rules
-├── vite.config.ts
-├── tsconfig.json
-└── package.json
+src/
+├── app/
+│   ├── components/
+│   │   ├── layout/       # Navigation, Footer, Layout wrapper
+│   │   ├── ImageWithFallback.tsx
+│   │   ├── Navigation.tsx
+│   │   └── ProductCard.tsx
+│   ├── data/
+│   │   └── index.ts      # All content: products, journal posts, cafes, plans
+│   └── pages/
+│       ├── Home.tsx
+│       ├── Shop.tsx
+│       ├── ProductDetail.tsx
+│       ├── About.tsx
+│       ├── Journal.tsx
+│       ├── JournalPost.tsx
+│       ├── Subscriptions.tsx
+│       ├── Cafes.tsx
+│       └── NotFound.tsx
+├── styles/
+│   ├── tailwind.css      # Tailwind + Google Fonts import
+│   ├── theme.css         # CSS design tokens: colors, fonts, utilities
+│   └── index.css         # Root style imports
+├── main.tsx              # App entry point with route definitions
+└── ...
 ```
 
 ---
 
 ## Design System
 
-The site uses a custom design token system via CSS variables:
+The site uses a custom coffee-inspired design system defined via CSS custom properties:
 
 | Token | Value | Usage |
-|---|---|---|
-| `--background` | `#F5F1EB` | Warm off-white base |
-| `--foreground` | `#2B1F18` | Deep espresso text |
-| `--accent` | `#C97B5E` | Terracotta — CTAs, highlights |
-| `--secondary` | `#EFEAE1` | Section backgrounds |
-| `--font-serif` | Instrument Serif | Headlines |
-| `--font-sans` | Inter | Body text |
+|-------|-------|-------|
+| `--background` | `#FAF8F5` | Warm off-white base |
+| `--foreground` | `#1C1410` | Deep espresso text |
+| `--accent` | `#B5623E` | Terracotta — CTAs, highlights |
+| `--section-a` | `#FAF8F5` | Warm white section |
+| `--section-b` | `#F0EBE3` | Warm beige section |
+| `--section-c` | `#E8DDD3` | Deeper warm tan |
+| `--font-serif` | Playfair Display | Headlines |
+| `--font-sans` | DM Sans | Body text |
 
 ---
 
+## Deployment
 
+Deploy to Vercel with zero configuration:
+
+```bash
+npm install -g vercel
+vercel
+
+# Or connect your GitHub repository via vercel.com
+# The included vercel.json handles SPA routing automatically.
+```
+
+---
+
+## License
+
+MIT

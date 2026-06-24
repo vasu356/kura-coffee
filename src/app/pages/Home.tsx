@@ -1,310 +1,258 @@
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from '../components/ImageWithFallback';
-import { Divider } from '../components/Divider';
 import { products, journalPosts } from '../data';
 import { ProductCard } from '../components/ProductCard';
+
+/* ---------- reusable primitives ---------- */
+function Label({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
+  return (
+    <p style={{
+      fontSize: 10, fontWeight: 500, letterSpacing: '0.22em', textTransform: 'uppercase',
+      color: light ? 'rgba(250,248,245,0.5)' : 'var(--muted-foreground)',
+      marginBottom: 16, fontFamily: 'var(--font-sans)',
+    }}>{children}</p>
+  );
+}
+
+function SectionHead({ label, title, light = false }: { label: string; title: React.ReactNode; light?: boolean }) {
+  return (
+    <div style={{ marginBottom: 56 }}>
+      <Label light={light}>{label}</Label>
+      <h2 style={{
+        fontFamily: 'var(--font-serif)', fontWeight: 400,
+        fontSize: 'clamp(32px, 4vw, 48px)',
+        color: light ? '#FAF8F5' : 'var(--foreground)',
+        lineHeight: 1.18, maxWidth: 680,
+      }}>{title}</h2>
+    </div>
+  );
+}
+
+function Btn({ to, children, variant = 'filled' }: { to: string; children: React.ReactNode; variant?: 'filled' | 'ghost' | 'white' }) {
+  const base: React.CSSProperties = {
+    display: 'inline-flex', alignItems: 'center', gap: 8,
+    textDecoration: 'none', fontFamily: 'var(--font-sans)',
+    fontSize: 13, fontWeight: 500, letterSpacing: '0.05em',
+    transition: 'all 0.2s', cursor: 'pointer',
+  };
+  if (variant === 'filled') return (
+    <Link to={to} style={{ ...base, background: 'var(--accent)', color: '#fff', padding: '13px 28px' }}
+      onMouseEnter={e => (e.currentTarget.style.background = '#9E4E2B')}
+      onMouseLeave={e => (e.currentTarget.style.background = 'var(--accent)')}>
+      {children}
+    </Link>
+  );
+  if (variant === 'white') return (
+    <Link to={to} style={{ ...base, background: '#FAF8F5', color: '#1C1410', padding: '13px 28px' }}>
+      {children}
+    </Link>
+  );
+  return (
+    <Link to={to} style={{ ...base, color: 'var(--foreground)', borderBottom: '1px solid rgba(28,20,16,0.25)', paddingBottom: 2 }}
+      onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
+      onMouseLeave={e => (e.currentTarget.style.color = 'var(--foreground)')}>
+      {children}
+    </Link>
+  );
+}
+
+/* ---------------------------------------- */
 
 export function Home() {
   return (
     <div>
-      {/* Hero */}
-      <section className="relative h-screen flex items-end justify-start">
-        <div className="absolute inset-0 overflow-hidden">
+
+      {/* ── 1. HERO ── full-height, image behind nav ─────────────────────────── */}
+      <section style={{ position: 'relative', height: '100svh', minHeight: 600, display: 'flex', alignItems: 'flex-end' }}>
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
           <ImageWithFallback
             src="https://images.unsplash.com/photo-1670758611084-e216510c5433?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920"
-            alt="Coffee cherries"
+            alt="Coffee cherries on a branch"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(20,12,8,0.88) 0%, rgba(20,12,8,0.45) 50%, rgba(20,12,8,0.2) 100%)' }} />
         </div>
 
-        <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-10 pb-20 md:pb-28 w-full">
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/60 mb-6 font-medium">
-            Single-origin · Small-batch · Chennai
-          </p>
-          <h1
-            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl mb-8 leading-[1.08] text-white font-light max-w-4xl"
-            style={{ fontFamily: 'var(--font-serif)' }}
-          >
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '0 32px 80px', width: '100%' }}>
+          <Label light>Single-origin · Small-batch · Chennai</Label>
+          <h1 style={{
+            fontFamily: 'var(--font-serif)', fontWeight: 400,
+            fontSize: 'clamp(42px, 6.5vw, 88px)',
+            color: '#FAF8F5', lineHeight: 1.06,
+            maxWidth: 820, marginBottom: 36, letterSpacing: '-0.02em',
+          }}>
             Indian coffee, roasted to taste like where it came from.
           </h1>
-          <div className="flex flex-col sm:flex-row items-start gap-6">
-            <Link
-              to="/shop"
-              className="inline-flex items-center gap-2 bg-accent text-white px-8 py-3.5 text-[15px] hover:bg-accent/90 transition-all font-medium tracking-wide"
-            >
-              Shop the harvest <ArrowRight size={18} />
-            </Link>
-            <Link
-              to="/about"
-              className="inline-flex items-center gap-2 text-[15px] text-white/80 hover:text-white transition-colors border-b border-white/30 hover:border-white pb-0.5"
-            >
-              Read our origin story <ArrowRight size={16} />
-            </Link>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
+            <Btn to="/shop" variant="filled">Shop the harvest <ArrowRight size={16} /></Btn>
+            <Btn to="/about" variant="white">Our origin story <ArrowRight size={16} /></Btn>
           </div>
         </div>
       </section>
 
-      {/* Current Harvest */}
-      <section id="shop" className="py-28 md:py-36 px-6 md:px-10">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="mb-16 max-w-2xl">
-            <p className="text-[11px] uppercase tracking-[0.2em] mb-4 text-muted-foreground font-medium">
-              This month's harvest
-            </p>
-            <h2 className="text-4xl md:text-5xl font-light leading-tight" style={{ fontFamily: 'var(--font-serif)' }}>
-              Single-origin lots from this year's crop, available while stocks last.
+      {/* ── 2. CURRENT HARVEST ── section-a (warm white) ─────────────────────── */}
+      <section style={{ background: 'var(--section-a)', padding: '96px 32px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <SectionHead
+            label="This month's harvest"
+            title="Single-origin lots from this year's crop, available while stocks last."
+          />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 40 }}>
+            {products.slice(0, 3).map(p => <ProductCard key={p.id} {...p} />)}
+          </div>
+          <div style={{ marginTop: 48, textAlign: 'center' }}>
+            <Btn to="/shop" variant="ghost">View all coffees <ArrowRight size={14} /></Btn>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3. STORY ── section-b (warm beige) with left image ───────────────── */}
+      <section style={{ background: 'var(--section-b)', borderTop: '1px solid rgba(28,20,16,0.08)', borderBottom: '1px solid rgba(28,20,16,0.08)', padding: '96px 32px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }} className="grid-1-on-mobile">
+          <div style={{ aspectRatio: '3/4', overflow: 'hidden', borderRadius: 2 }}>
+            <ImageWithFallback
+              src="https://images.unsplash.com/photo-1722962883757-4ca3c1c9df56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800"
+              alt="Coffee farmer"
+              className="w-full h-full object-cover"
+              style={{ transition: 'transform 0.8s ease' }}
+            />
+          </div>
+          <div>
+            <Label>Our Story</Label>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px,3.5vw,44px)', lineHeight: 1.18, marginBottom: 28, letterSpacing: '-0.01em' }}>
+              We started Kura because we couldn't find Indian coffee we were proud to serve.
             </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14">
-            {products.slice(0, 3).map((product) => (
-              <ProductCard key={product.id} {...product} />
-            ))}
-          </div>
-
-          <div className="mt-14 text-center">
-            <Link
-              to="/shop"
-              className="inline-flex items-center gap-2 text-[15px] hover:text-accent transition-colors border-b border-foreground/20 hover:border-accent pb-0.5"
-            >
-              View all coffees <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Story */}
-      <section className="py-28 md:py-36 px-6 md:px-10 bg-secondary/40">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
-            <div className="aspect-[3/4] bg-muted overflow-hidden rounded-sm">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1722962883757-4ca3c1c9df56?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800"
-                alt="Coffee farm worker"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="space-y-7">
-              <h2
-                className="text-4xl md:text-5xl leading-[1.2] font-light"
-                style={{ fontFamily: 'var(--font-serif)' }}
-              >
-                We started Kura because we couldn't find Indian coffee we were proud to serve.
-              </h2>
-
-              <div className="space-y-5 text-[18px] leading-[1.8] text-foreground/80">
-                <p>
-                  India has been growing exceptional coffee for over a century, but most of it gets
-                  shipped abroad as commodity beans. The best lots — the ones with distinct flavors
-                  that tell you where they're from — rarely make it to local roasters.
-                </p>
-                <p>
-                  We work directly with small farms in Chikmagalur, Coorg, and Araku Valley. We
-                  roast weekly in Chennai and ship within seven days of roasting.
-                </p>
-              </div>
-
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-2 text-[15px] hover:text-accent transition-colors border-b border-foreground/20 hover:border-accent pb-0.5"
-              >
-                More about the people we work with <ArrowRight size={16} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Process */}
-      <section className="py-28 md:py-36 px-6 md:px-10">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="text-center mb-20">
-            <p className="text-[11px] uppercase tracking-[0.2em] mb-4 text-muted-foreground font-medium">
-              Our Process
+            <p style={{ fontSize: 17, lineHeight: 1.85, color: 'var(--muted-foreground)', marginBottom: 16 }}>
+              India grows exceptional coffee — but most of the best lots get shipped abroad as commodity beans. We work directly with small farms in Chikmagalur, Coorg, and Araku Valley.
             </p>
-            <h2 className="text-4xl md:text-5xl font-light" style={{ fontFamily: 'var(--font-serif)' }}>
-              From farm to your filter.
-            </h2>
+            <p style={{ fontSize: 17, lineHeight: 1.85, color: 'var(--muted-foreground)', marginBottom: 36 }}>
+              We roast weekly in Chennai and ship within seven days of roasting. No warehouses, no stale beans.
+            </p>
+            <Btn to="/about" variant="ghost">More about who we work with <ArrowRight size={14} /></Btn>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-14">
+      {/* ── 4. PROCESS ── section-a + ruled lines ────────────────────────────── */}
+      <section style={{ background: 'var(--section-a)', padding: '96px 32px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <SectionHead label="Our Process" title="From farm to your filter." />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, borderTop: '1px solid rgba(28,20,16,0.12)' }} className="grid-1-on-mobile">
             {[
-              {
-                step: '01',
-                title: 'Sourced from named farms',
-                desc: 'Every bag lists the farm, the varietal, and the processing method. We visit the estates, meet the farmers, and taste the lots before we buy.',
-                img: 'https://images.unsplash.com/photo-1629008642899-178df6fc5f2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600',
-              },
-              {
-                step: '02',
-                title: 'Roasted weekly in small batches',
-                desc: 'We roast to bring out the coffee\'s natural flavors — not to mask them. Light to medium roasts that let the origin shine through.',
-                img: 'https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600',
-              },
-              {
-                step: '03',
-                title: 'Shipped within 7 days of roasting',
-                desc: 'Coffee starts losing its best flavors about two weeks after roasting. We ship fast so you get it at its peak.',
-                img: 'https://images.unsplash.com/photo-1587955245893-389f2215c6eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600',
-              },
-            ].map((item) => (
-              <div key={item.step}>
-                <div className="aspect-square bg-secondary mb-7 overflow-hidden rounded-sm">
-                  <ImageWithFallback
-                    src={item.img}
-                    alt={item.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                  />
+              { step: '01', title: 'Sourced from named farms', body: 'Every bag names the farm, varietal, and process. We visit the estates and taste lots before we buy.', img: 'https://images.unsplash.com/photo-1629008642899-178df6fc5f2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600' },
+              { step: '02', title: 'Roasted weekly in small batches', body: 'Light to medium roasts that let the origin speak. We never roast to hide a flavour.', img: 'https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600' },
+              { step: '03', title: 'Shipped within 7 days of roasting', body: 'Coffee degrades fast. We ship at peak so you get it exactly right.', img: 'https://images.unsplash.com/photo-1587955245893-389f2215c6eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600' },
+            ].map((item, i) => (
+              <div key={item.step} style={{ padding: '48px 40px 40px 0', borderRight: i < 2 ? '1px solid rgba(28,20,16,0.12)' : 'none', marginRight: i < 2 ? 40 : 0 }}>
+                <div style={{ aspectRatio: '4/3', overflow: 'hidden', borderRadius: 2, marginBottom: 28 }}>
+                  <ImageWithFallback src={item.img} alt={item.title} className="w-full h-full object-cover" style={{ transition: 'transform 0.7s' }} />
                 </div>
-                <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-3 font-medium">
-                  {item.step}
-                </div>
-                <h3 className="text-2xl mb-3 font-light" style={{ fontFamily: 'var(--font-serif)' }}>
-                  {item.title}
-                </h3>
-                <p className="leading-[1.8] text-[16px] text-foreground/70">{item.desc}</p>
+                <p style={{ fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 12, fontWeight: 500 }}>{item.step}</p>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, lineHeight: 1.25, marginBottom: 14 }}>{item.title}</h3>
+                <p style={{ fontSize: 15, lineHeight: 1.8, color: 'var(--muted-foreground)' }}>{item.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <Divider />
-
-      {/* Subscriptions */}
-      <section className="py-28 md:py-36 px-6 md:px-10 bg-secondary/40">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
-            <div className="aspect-square bg-muted overflow-hidden rounded-sm">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1565273975221-fe8dc98dba50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800"
-                alt="Coffee bags"
-                className="w-full h-full object-cover"
-              />
+      {/* ── 5. SUBSCRIPTIONS ── section-c (deeper tan) ───────────────────────── */}
+      <section style={{ background: 'var(--section-c)', borderTop: '1px solid rgba(28,20,16,0.1)', padding: '96px 32px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }} className="grid-1-on-mobile">
+          <div style={{ aspectRatio: '1/1', overflow: 'hidden', borderRadius: 2 }}>
+            <ImageWithFallback
+              src="https://images.unsplash.com/photo-1565273975221-fe8dc98dba50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800"
+              alt="Coffee subscription bags"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <Label>Coffee Subscription</Label>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px,3.5vw,44px)', lineHeight: 1.18, marginBottom: 24, letterSpacing: '-0.01em' }}>
+              Or let us pick. A different lot every month.
+            </h2>
+            <p style={{ fontSize: 17, lineHeight: 1.85, color: 'var(--muted-foreground)', marginBottom: 28 }}>
+              125g, 250g, or 500g — every two or four weeks
+            </p>
+            <div style={{ marginBottom: 36 }}>
+              <p style={{ fontFamily: 'var(--font-serif)', fontSize: 32, color: 'var(--foreground)', marginBottom: 20 }}>From ₹720/month</p>
+              {['Free shipping on every delivery', 'Skip or cancel anytime, no penalty', 'Member-only single lots'].map(item => (
+                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                  <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--accent)', flexShrink: 0 }} />
+                  <span style={{ fontSize: 15, color: 'var(--muted-foreground)' }}>{item}</span>
+                </div>
+              ))}
             </div>
-
-            <div className="space-y-8">
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.2em] mb-4 text-muted-foreground font-medium">
-                  Coffee Subscription
-                </p>
-                <h2 className="text-4xl md:text-5xl leading-[1.2] font-light" style={{ fontFamily: 'var(--font-serif)' }}>
-                  Or let us pick. A different lot every month.
-                </h2>
-              </div>
-
-              <p className="text-[18px] leading-[1.8] text-foreground/80">
-                125g, 250g, or 500g — every two or four weeks
-              </p>
-
-              <div>
-                <p className="text-3xl font-light mb-4" style={{ fontFamily: 'var(--font-serif)' }}>
-                  From ₹720/month
-                </p>
-                <ul className="space-y-3 text-[16px] leading-[1.8]">
-                  {['Free shipping', 'Skip or cancel anytime', 'Member-only single lots'].map((item) => (
-                    <li key={item} className="flex items-center gap-3">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <Link
-                to="/subscriptions"
-                className="inline-flex items-center gap-2 bg-accent text-white px-8 py-3.5 hover:bg-accent/90 transition-all font-medium tracking-wide text-[15px]"
-              >
-                Start a subscription <ArrowRight size={18} />
-              </Link>
-            </div>
+            <Btn to="/subscriptions" variant="filled">Start a subscription <ArrowRight size={16} /></Btn>
           </div>
         </div>
       </section>
 
-      {/* Journal */}
-      <section className="py-28 md:py-36 px-6 md:px-10">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="flex items-end justify-between mb-14">
+      {/* ── 6. JOURNAL ── section-b ──────────────────────────────────────────── */}
+      <section style={{ background: 'var(--section-b)', borderTop: '1px solid rgba(28,20,16,0.09)', padding: '96px 32px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 56 }}>
             <div>
-              <p className="text-[11px] uppercase tracking-[0.2em] mb-4 text-muted-foreground font-medium">
-                The Journal
-              </p>
-              <h2 className="text-4xl md:text-5xl font-light" style={{ fontFamily: 'var(--font-serif)' }}>
-                Notes from the roastery.
-              </h2>
+              <Label>The Journal</Label>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px,3.5vw,44px)', lineHeight: 1.18 }}>Notes from the roastery.</h2>
             </div>
-            <Link
-              to="/journal"
-              className="hidden md:inline-flex items-center gap-2 text-[14px] hover:text-accent transition-colors border-b border-foreground/20 hover:border-accent pb-0.5"
-            >
-              All entries <ArrowRight size={14} />
-            </Link>
+            <Btn to="/journal" variant="ghost">All entries <ArrowRight size={14} /></Btn>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-14">
-            {journalPosts.map((post) => (
-              <Link to={`/journal/${post.id}`} key={post.id} className="group cursor-pointer block">
-                <div className="aspect-[4/3] bg-muted mb-6 overflow-hidden rounded-sm">
-                  <ImageWithFallback
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40 }} className="grid-1-on-mobile">
+            {journalPosts.map(post => (
+              <Link to={`/journal/${post.id}`} key={post.id} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                className="group">
+                <div style={{ aspectRatio: '4/3', overflow: 'hidden', borderRadius: 2, marginBottom: 20, background: 'var(--muted)' }}>
+                  <ImageWithFallback src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 </div>
-                <p className="text-[11px] uppercase tracking-[0.2em] mb-3 text-muted-foreground font-medium">
-                  {post.category} · {post.date}
+                <p style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted-foreground)', marginBottom: 10, fontWeight: 500 }}>
+                  {post.category} · {post.date} · {post.readTime}
                 </p>
-                <h3 className="text-xl mb-3 leading-snug font-light hover:text-accent transition-colors" style={{ fontFamily: 'var(--font-serif)' }}>
-                  {post.title}
-                </h3>
-                <p className="text-[15px] text-foreground/60 leading-[1.7]">{post.excerpt}</p>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, lineHeight: 1.3, marginBottom: 10 }}
+                  className="group-hover:text-accent transition-colors">{post.title}</h3>
+                <p style={{ fontSize: 14, lineHeight: 1.75, color: 'var(--muted-foreground)' }}>{post.excerpt}</p>
               </Link>
             ))}
-          </div>
-
-          <div className="text-center mt-12 md:hidden">
-            <Link
-              to="/journal"
-              className="inline-flex items-center gap-2 text-[14px] hover:text-accent transition-colors border-b border-foreground/20 hover:border-accent pb-0.5"
-            >
-              Read all journal entries <ArrowRight size={14} />
-            </Link>
           </div>
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="py-28 px-6 md:px-10 bg-foreground text-background">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2
-            className="text-4xl md:text-5xl mb-5 font-light"
-            style={{ fontFamily: 'var(--font-serif)', color: '#F5F1EB' }}
-          >
+      {/* ── 7. NEWSLETTER ── dark section ────────────────────────────────────── */}
+      <section style={{ background: '#1C1410', padding: '96px 32px' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(250,248,245,0.4)', marginBottom: 20, fontWeight: 500 }}>Stay in the loop</p>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px,3.5vw,44px)', color: '#FAF8F5', lineHeight: 1.18, marginBottom: 16, letterSpacing: '-0.01em' }}>
             Get a note when a new lot lands.
           </h2>
-          <p className="text-[17px] mb-10 leading-[1.8] opacity-70" style={{ color: '#F5F1EB' }}>
-            About once a month. No spam, no sales emails — just new harvests, brewing notes, and the occasional recipe.
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: 'rgba(250,248,245,0.5)', marginBottom: 40 }}>
+            About once a month. No spam — just new harvests, brewing notes, and the occasional farm visit story.
           </p>
-          <div className="flex flex-col sm:flex-row gap-0 max-w-md mx-auto">
+          <div style={{ display: 'flex', maxWidth: 440, margin: '0 auto' }}>
             <input
               type="email"
-              placeholder="Your email address"
-              className="flex-1 px-5 py-3.5 bg-transparent border border-white/25 focus:border-white/60 outline-none transition-colors text-[16px] placeholder:text-white/40"
-              style={{ color: '#F5F1EB' }}
+              placeholder="your@email.com"
+              style={{
+                flex: 1, padding: '14px 18px', background: 'rgba(250,248,245,0.07)',
+                border: '1px solid rgba(250,248,245,0.15)', borderRight: 'none',
+                color: '#FAF8F5', fontSize: 14, fontFamily: 'var(--font-sans)', outline: 'none',
+              }}
             />
-            <button
-              type="submit"
-              className="px-8 py-3.5 bg-accent text-white hover:bg-accent/90 transition-all font-medium tracking-wide text-[15px] whitespace-nowrap"
-            >
+            <button style={{
+              padding: '14px 24px', background: 'var(--accent)', color: '#fff',
+              border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 500,
+              letterSpacing: '0.05em', fontFamily: 'var(--font-sans)',
+              transition: 'background 0.2s',
+            }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#9E4E2B')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'var(--accent)')}>
               Subscribe
             </button>
           </div>
         </div>
       </section>
+
     </div>
   );
 }

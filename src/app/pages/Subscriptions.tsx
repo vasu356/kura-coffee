@@ -1,150 +1,127 @@
 import { useState } from 'react';
-import { ArrowRight, Check } from 'lucide-react';
-import { subscriptionPlans } from '../data';
+import { Check, ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from '../components/ImageWithFallback';
+import { subscriptionPlans } from '../data';
 
 const faqs = [
-  {
-    q: 'How does the subscription work?',
-    a: 'We send you a different single-origin lot each period. You choose the size and frequency, and we pick the best lot available from the current harvest.',
-  },
-  {
-    q: 'Can I skip or pause a delivery?',
-    a: 'Yes — skip any delivery with 5 days notice. Pause for up to 3 months with no penalty.',
-  },
-  {
-    q: 'What if I don\'t like the coffee I receive?',
-    a: 'Email us within 7 days and we\'ll send a replacement at no cost.',
-  },
-  {
-    q: 'Do subscribers get access to special lots?',
-    a: 'Yes. Some micro-lots are too small to sell publicly — they go to subscribers first, if at all.',
-  },
+  { q: 'How does the subscription work?', a: 'We send a different single-origin lot each period. You choose size and frequency; we pick the best lot from the current harvest.' },
+  { q: 'Can I skip or pause a delivery?', a: 'Yes — skip any delivery with 5 days notice. Pause for up to 3 months with no penalty.' },
+  { q: "What if I don't like the coffee?", a: "Email us within 7 days and we'll send a replacement at no cost." },
+  { q: 'Do subscribers get access to special lots?', a: 'Yes. Some micro-lots are too small to sell publicly — they go to subscribers first, if at all.' },
+  { q: 'When am I charged?', a: 'On signup for the first period, then automatically on each renewal date. Cancel anytime.' },
 ];
 
 export function Subscriptions() {
-  const [open, setOpen] = useState<number | null>(null);
-  const [selectedPlan, setSelectedPlan] = useState<string | null>('regular');
+  const [selected, setSelected] = useState('regular');
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="pt-24 min-h-screen">
-      {/* Header */}
-      <section className="relative h-[50vh] flex items-end">
-        <div className="absolute inset-0">
-          <ImageWithFallback
-            src="https://images.unsplash.com/photo-1565273975221-fe8dc98dba50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920"
-            alt="Coffee subscription"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
+    <div>
+      {/* Hero — dark */}
+      <section style={{ position: 'relative', height: '55vh', minHeight: 440, display: 'flex', alignItems: 'flex-end', paddingTop: 68 }}>
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+          <ImageWithFallback src="https://images.unsplash.com/photo-1565273975221-fe8dc98dba50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1920" alt="Coffee subscription" className="w-full h-full object-cover" />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(20,12,8,0.9) 0%, rgba(20,12,8,0.4) 60%, rgba(20,12,8,0.15) 100%)' }} />
         </div>
-        <div className="relative z-10 px-6 md:px-10 pb-16 max-w-[1200px] mx-auto w-full">
-          <p className="text-[11px] uppercase tracking-[0.25em] text-white/60 mb-4 font-medium">Coffee Subscription</p>
-          <h1 className="text-5xl md:text-6xl font-light text-white leading-tight max-w-2xl" style={{ fontFamily: 'var(--font-serif)' }}>
+        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '0 32px 64px', width: '100%' }}>
+          <p style={{ fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(250,248,245,0.5)', marginBottom: 16, fontWeight: 500 }}>Coffee Subscription</p>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px,5vw,60px)', color: '#FAF8F5', fontWeight: 400, lineHeight: 1.1, maxWidth: 640, letterSpacing: '-0.02em' }}>
             Let us pick. A different lot every month.
           </h1>
         </div>
       </section>
+      <div style={{ height: 3, background: 'var(--accent)' }} />
 
-      {/* Plans */}
-      <section className="py-24 px-6 md:px-10">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="mb-16 max-w-xl">
-            <p className="text-[11px] uppercase tracking-[0.2em] mb-4 text-muted-foreground font-medium">Choose a plan</p>
-            <h2 className="text-4xl font-light" style={{ fontFamily: 'var(--font-serif)' }}>
-              Simple pricing. No lock-in.
-            </h2>
+      {/* Plans — section-a */}
+      <section style={{ background: 'var(--section-a)', padding: '80px 32px' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <div style={{ marginBottom: 48 }}>
+            <p style={{ fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--muted-foreground)', marginBottom: 16, fontWeight: 500 }}>Choose a plan</p>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px,3.5vw,44px)', lineHeight: 1.18 }}>Simple pricing. No lock-in.</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            {subscriptionPlans.map((plan) => (
-              <div
-                key={plan.id}
-                onClick={() => setSelectedPlan(plan.id)}
-                className={`border p-8 cursor-pointer transition-all relative ${
-                  selectedPlan === plan.id
-                    ? 'border-foreground bg-background shadow-sm'
-                    : 'border-border/50 hover:border-foreground/40'
-                }`}
-              >
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20, marginBottom: 56 }} className="grid-1-on-mobile">
+            {subscriptionPlans.map(plan => (
+              <div key={plan.id} onClick={() => setSelected(plan.id)} style={{
+                padding: '32px 28px', cursor: 'pointer', position: 'relative',
+                border: `2px solid ${selected === plan.id ? 'var(--accent)' : 'rgba(28,20,16,0.15)'}`,
+                background: selected === plan.id ? 'rgba(181,98,62,0.04)' : 'transparent',
+                transition: 'all 0.2s',
+              }}>
                 {plan.popular && (
-                  <span className="absolute -top-3 left-6 text-[10px] uppercase tracking-[0.2em] bg-accent text-white px-3 py-1">
+                  <span style={{ position: 'absolute', top: -12, left: 24, fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', background: 'var(--accent)', color: '#fff', padding: '4px 12px', fontWeight: 600 }}>
                     Most Popular
                   </span>
                 )}
-
-                <div className="flex items-start justify-between mb-6">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
                   <div>
-                    <h3 className="text-2xl font-light mb-1" style={{ fontFamily: 'var(--font-serif)' }}>
-                      {plan.name}
-                    </h3>
-                    <p className="text-[13px] text-muted-foreground">{plan.size} · {plan.frequency}</p>
+                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 26, fontWeight: 400, marginBottom: 4 }}>{plan.name}</h3>
+                    <p style={{ fontSize: 12, color: 'var(--muted-foreground)', letterSpacing: '0.04em' }}>{plan.size} · {plan.frequency}</p>
                   </div>
-                  <div
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 ${
-                      selectedPlan === plan.id ? 'border-accent bg-accent' : 'border-border/60'
-                    }`}
-                  >
-                    {selectedPlan === plan.id && <Check size={11} className="text-white" strokeWidth={3} />}
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', border: `2px solid ${selected === plan.id ? 'var(--accent)' : 'rgba(28,20,16,0.25)'}`, background: selected === plan.id ? 'var(--accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 4, transition: 'all 0.2s' }}>
+                    {selected === plan.id && <Check size={12} color="#fff" strokeWidth={3} />}
                   </div>
                 </div>
-
-                <p className="text-[15px] text-foreground/70 mb-6 leading-[1.7]">{plan.description}</p>
-
-                <p className="text-3xl font-light" style={{ fontFamily: 'var(--font-serif)' }}>
+                <p style={{ fontSize: 14, color: 'var(--muted-foreground)', lineHeight: 1.7, marginBottom: 24 }}>{plan.description}</p>
+                <p style={{ fontFamily: 'var(--font-serif)', fontSize: 30 }}>
                   ₹{plan.price.toLocaleString('en-IN')}
-                  <span className="text-[14px] text-muted-foreground font-normal">/period</span>
+                  <span style={{ fontSize: 14, color: 'var(--muted-foreground)', fontFamily: 'var(--font-sans)', fontWeight: 300 }}>/period</span>
                 </p>
               </div>
             ))}
           </div>
 
           {/* Benefits */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-14 border-y border-border/40 mb-14">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 32, padding: '40px 0', borderTop: '1px solid rgba(28,20,16,0.1)', borderBottom: '1px solid rgba(28,20,16,0.1)', marginBottom: 40 }} className="grid-1-on-mobile">
             {[
               { title: 'Free shipping', desc: 'Every delivery, no minimum.' },
-              { title: 'Skip anytime', desc: 'Need a break? Pause with one click.' },
-              { title: 'Member lots', desc: 'Exclusive access to micro-lots before anyone else.' },
-            ].map((b) => (
+              { title: 'Skip anytime', desc: 'One click to pause or skip.' },
+              { title: 'Member lots', desc: 'Early access to micro-lot releases.' },
+            ].map(b => (
               <div key={b.title}>
-                <h4 className="text-[17px] font-medium mb-2">{b.title}</h4>
-                <p className="text-[15px] text-foreground/65 leading-[1.7]">{b.desc}</p>
+                <div style={{ width: 32, height: 2, background: 'var(--accent)', marginBottom: 16 }} />
+                <h4 style={{ fontSize: 16, fontWeight: 500, marginBottom: 6 }}>{b.title}</h4>
+                <p style={{ fontSize: 14, color: 'var(--muted-foreground)', lineHeight: 1.7 }}>{b.desc}</p>
               </div>
             ))}
           </div>
 
-          <button
-            className="inline-flex items-center gap-2 bg-accent text-white px-10 py-4 hover:bg-accent/90 transition-all font-medium tracking-wide text-[16px]"
-          >
-            Start a subscription <ArrowRight size={18} />
+          <button style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--accent)', color: '#fff', padding: '14px 32px', fontSize: 13, fontWeight: 500, letterSpacing: '0.06em', fontFamily: 'var(--font-sans)', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#9E4E2B')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'var(--accent)')}>
+            Start subscription <ArrowRight size={16} />
           </button>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="py-24 px-6 md:px-10 bg-secondary/40">
-        <div className="max-w-[800px] mx-auto">
-          <h2 className="text-4xl font-light mb-14" style={{ fontFamily: 'var(--font-serif)' }}>
-            Frequently asked.
-          </h2>
-          <div className="space-y-0">
-            {faqs.map((faq, i) => (
-              <div key={i} className="border-t border-border/40 last:border-b">
-                <button
-                  onClick={() => setOpen(open === i ? null : i)}
-                  className="w-full text-left py-6 flex items-start justify-between gap-6 hover:text-accent transition-colors group"
-                >
-                  <span className="text-[17px] font-medium group-hover:text-accent">{faq.q}</span>
-                  <span className="text-xl text-muted-foreground flex-shrink-0 mt-0.5">
-                    {open === i ? '−' : '+'}
-                  </span>
-                </button>
-                {open === i && (
-                  <p className="pb-6 text-[16px] leading-[1.8] text-foreground/70">{faq.a}</p>
-                )}
-              </div>
-            ))}
-          </div>
+      {/* FAQ — section-b */}
+      <section style={{ background: 'var(--section-b)', borderTop: '1px solid rgba(28,20,16,0.1)', padding: '80px 32px' }}>
+        <div style={{ maxWidth: 760, margin: '0 auto' }}>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px,3.5vw,40px)', lineHeight: 1.18, marginBottom: 48 }}>Frequently asked.</h2>
+          {faqs.map((faq, i) => (
+            <div key={i} style={{ borderTop: '1px solid rgba(28,20,16,0.12)', ...(i === faqs.length - 1 ? { borderBottom: '1px solid rgba(28,20,16,0.12)' } : {}) }}>
+              <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                style={{ width: '100%', textAlign: 'left', padding: '20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 24, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-sans)' }}>
+                <span style={{ fontSize: 16, fontWeight: 400, color: 'var(--foreground)' }}>{faq.q}</span>
+                <span style={{ fontSize: 22, color: 'var(--accent)', flexShrink: 0, lineHeight: 1 }}>{openFaq === i ? '−' : '+'}</span>
+              </button>
+              {openFaq === i && (
+                <p style={{ paddingBottom: 20, fontSize: 15, lineHeight: 1.8, color: 'var(--muted-foreground)' }}>{faq.a}</p>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonial — section-c */}
+      <section style={{ background: 'var(--section-c)', borderTop: '1px solid rgba(28,20,16,0.1)', padding: '64px 32px', textAlign: 'center' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto' }}>
+          <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(20px,2.5vw,28px)', fontStyle: 'italic', lineHeight: 1.5, color: 'var(--foreground)', marginBottom: 20 }}>
+            "I get something different every month. My weekday mornings are now something I actually look forward to."
+          </p>
+          <p style={{ fontSize: 12, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--muted-foreground)', fontWeight: 500 }}>
+            Meera R. — Regular subscriber since 2023
+          </p>
         </div>
       </section>
     </div>
